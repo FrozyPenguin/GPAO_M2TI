@@ -96,3 +96,15 @@ export function addArticle(req: Request, res: Response, next: NextFunction) {
     });
   }
 }
+
+export function deleteArticle(req: Request, res: Response, next: NextFunction) {
+  res.status(500).json({
+    error: 'Not yet implemented !',
+  });
+}
+
+export function updateArticle(req: Request, res: Response, next: NextFunction) {
+  res.status(500).json({
+    error: 'Not yet implemented !',
+  });
+}

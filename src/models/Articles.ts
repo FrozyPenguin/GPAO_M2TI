@@ -50,26 +50,3 @@ export const articles = Joi.object({
     ArticleType.SE
   ),
 });
-
-interface LienDeNomenclature {
-  // compose !== composant
-  compose: Article; // key(compose, composant),
-  composant: Article;
-  quantite_de_composition: number;
-}
-
-export const lienDeNomenclature = Joi.object({
-  compose: Joi.string().alphanum().required().min(4).max(10),
-  composant: Joi.string().alphanum().required().min(4).max(10),
-  quantite_de_composition: Joi.number().required(),
-});
-Joi.expression('{{compose != composant}}');
-
-interface Remplacement {
-  // remplace !== remplacant
-  remplace_compose: Article; // key(remplace_compose, remplace_composant, remplacant_compose, remplacant_composant)
-  remplace_composant: Article;
-  remplacant_compose: Article;
-  remplacant_composant: Article;
-  date_de_remplacement: Date;
-}
