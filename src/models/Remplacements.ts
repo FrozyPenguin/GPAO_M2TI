@@ -8,3 +8,5 @@ export interface Remplacement {
   remplacant_composant: Article;
   date_de_remplacement: Date;
 }
+
+// TODO: create Entity

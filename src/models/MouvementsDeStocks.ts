@@ -6,4 +6,6 @@ export interface MouvementsDeStock {
   // NOT YET IMPLEMENTED
 }
 
+// TODO: create Entity
+
 export const mouvementsDeStock = Joi.object({});

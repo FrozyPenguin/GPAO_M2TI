@@ -22,6 +22,8 @@ export interface Article {
   PF_ou_MP_ou_Piece_ou_SE: ArticleType;
 }
 
+// TODO: create Entity
+
 export const articles = Joi.object({
   reference: Joi.string().alphanum().required().min(4).max(10),
   designation: Joi.string()

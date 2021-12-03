@@ -6,4 +6,6 @@ export interface PosteDeCharge {
   // NOT YET IMPLEMENTED
 }
 
+// TODO: create Entity
+
 export const posteDeCharge = Joi.object({});

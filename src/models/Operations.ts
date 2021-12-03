@@ -6,4 +6,6 @@ export interface Operation {
   // NOT YET IMPLEMENTED
 }
 
+// TODO: create Entity
+
 export const operation = Joi.object({});
