@@ -58,11 +58,23 @@ export class PosteDeCharge {
   @MaxLength(2)
   typeTauxHoraireOuForfait!: string | null;
 
-  @OneToMany(() => Operation, (operation) => operation.machine)
+  @OneToMany(
+    () => Operation,
+    (operation) => operation.machine,
+    {
+      eager: true
+    }
+  )
   @ValidateNested()
-  operations!: Operation[];
+  machines!: Operation[];
 
-  @OneToMany(() => Operation, (operation) => operation.mainDOeuvre)
+  @OneToMany(
+    () => Operation,
+    (operation) => operation.mainDOeuvre,
+    {
+      eager: true
+    }
+  )
   @ValidateNested()
-  operations2!: Operation[];
+  mainDOeuvres!: Operation[];
 }

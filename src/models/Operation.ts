@@ -41,8 +41,8 @@ export class Operation {
   @MaxLength(30)
   libelleOperation!: string;
 
-  @ManyToOne(() => PosteDeCharge, (posteDeCharge) => posteDeCharge.operations, {
-    onDelete: "CASCADE",
+  @ManyToOne(() => PosteDeCharge, (posteDeCharge) => posteDeCharge.machines, {
+    onDelete: "CASCADE"
   })
   @JoinColumn([{ name: "machine", referencedColumnName: "posteDeChargeId" }])
   @ValidateNested()
@@ -50,8 +50,10 @@ export class Operation {
 
   @ManyToOne(
     () => PosteDeCharge,
-    (posteDeCharge) => posteDeCharge.operations2,
-    { onDelete: "CASCADE" }
+    (posteDeCharge) => posteDeCharge.mainDOeuvres,
+    {
+      onDelete: "CASCADE"
+    }
   )
   @JoinColumn([
     { name: "main_d_oeuvre", referencedColumnName: "posteDeChargeId" },

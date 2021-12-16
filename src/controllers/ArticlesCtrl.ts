@@ -1,89 +1,160 @@
+import { validate, ValidationError } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
-import { Article, ArticleType } from '../models/Article';
+import { Article } from '../models/Article';
 
 const ArticleRepository: Repository<Article> = getRepository(Article);
 
-export async function getArticles(req: Request, res: Response, next: NextFunction) {
+export function getArticles(req: Request, res: Response, next: NextFunction) {
   // Test: 'curl http://localhost:3000/api/GPAO/Articles'
-  res.json(await ArticleRepository.find());
+  ArticleRepository.find().then(articles => res.status(200).json(articles))
+  .catch(error => {
+    console.error(error);
+    return res
+      .status(500)
+      .json({
+        error: 500,
+        message: 'Erreur au niveau de votre demande !'
+      });
+  });
 }
 
-export async function getArticle(req: Request, res: Response, next: NextFunction) {
-  const article = await ArticleRepository.findOne(req.params.reference);
-  console.log(req.params.reference);
-  console.log(article);
-  if(!article) {
-    res
-      .status(404)
+export function getArticle(req: Request, res: Response, next: NextFunction) {
+  ArticleRepository.findOne(req.params.reference)
+  .then(article => {
+    if(!article) {
+      return res
+        .status(404)
+        .json({
+          error: 404,
+          param: req.params.reference,
+          message: 'Article not found !'
+        });
+    }
+    res.status(200).json(article);
+  })
+  .catch(error => {
+    console.error(error);
+    return res
+      .status(500)
       .json({
-        error: 404,
-        param: req.params.reference,
-        message: 'Article not found !'
+        error: 500,
+        message: 'Erreur au niveau de votre demande !'
+      });
+  });
+}
+
+// TODO: Pour faire des ajout encapsulé peut etre problème
+export async function addArticle(req: Request, res: Response, next: NextFunction) {
+  // console.log(JSON.stringify(request.body));
+  const article: Article = plainToInstance(Article, req.body);
+
+  try {
+    const errors: ValidationError[] = await validate(article, { skipMissingProperties: true });
+    if(errors.length > 0) {
+      return res
+        .status(400)
+        .json({
+          error: 400,
+          message: `Article invalidé (échec) : ${ errors.map(error => error.toString()).join(', ') }`
+        });
+    }
+
+    const savedArticles: Article = await ArticleRepository.save(article);
+    return res
+      .status(201)
+      .json({
+        message: 'Article validé (succès) : ' + savedArticles.reference,
       });
   }
-  res.send(article);
+  catch(error) {
+    return res
+      .status(500)
+      .json({
+        error: 500,
+        message: `Erreur au niveau de votre demande !`
+      });
+  }
 }
 
-export function addArticle(req: Request, res: Response, next: NextFunction) {
-  /* Création article (Windows 10) :
-      $CC201 = @{
-          reference = 'CC201'
-          designation = 'Camion citerne rouge'
-          type_fabrication_achat = 'Fab. a la commande'
-          unite_achat_stock = 'unite'
-          delai_en_semaine = 2
-          lot_de_reapprovisionnement = 150
-          stock_maxi = 600
-          PF_ou_MP_ou_Piece_ou_SE = 'PF'
-      }|ConvertTo-Json
-      echo $CC201
-      */
-  /* (Windows 10) :
-      $Nouvel_article = @{
-          Body        = $CC201
-          ContentType = 'application/json'
-          Method      = 'POST'
-          Uri         = 'http://localhost:1963/api/GPAO/Nouvel_article'
-      }
-      */
-  /* (Windows 10) :
-      Invoke-RestMethod @Nouvel_article
-      */
-  // console.log(JSON.stringify(request.body));
-  const article: Article = req.body;
+export async function deleteArticle(req: Request, res: Response, next: NextFunction) {
+  try {
+    const article = await ArticleRepository.findOne(req.params.reference);
 
-  // const { error, value } = articles.validate({
-  //   reference: article.reference, // Unicity required as well...
-  //   designation: article.designation, // Unicity required as well...
-  //   type_fabrication_achat: article.type_fabrication_achat,
-  //   unite_achat_stock: article.unite_achat_stock,
-  //   delai_en_semaine: article.delai_en_semaine,
-  //   lot_de_reapprovisionnement: article.lot_de_reapprovisionnement,
-  //   stock_maxi: article.stock_maxi,
-  //   PF_ou_MP_ou_Piece_ou_SE: article.PF_ou_MP_ou_Piece_ou_SE,
-  // });
+    if(!article) {
+      return res
+        .status(404)
+        .json({
+          error: 404,
+          param: req.params.reference,
+          message: 'Article not found !'
+        });
+    }
 
-  // if (error === undefined) {
-  //   res.status(201).json({
-  //     message: 'Article validé (succès) : ' + value.reference,
-  //   });
-  //   Articles.push(article);
-  // } else {
-  //   res.status(400).json({
-  //     message: 'Article invalidé (échec) : ' + error.message,
-  //   });
-  // }
+    const removeArticle = await ArticleRepository.remove(article as Article);
+    return res
+      .status(200)
+      .json({
+        message: 'Article supprimé (succès) : ' + removeArticle.reference || req.params.reference,
+      });
+  }
+  catch(error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({
+        error: 500,
+        message: 'Erreur au niveau de votre demande !'
+      });
+  }
 }
 
-export function deleteArticle(req: Request, res: Response, next: NextFunction) {
-  res.status(500).json({
-    error: 'Not yet implemented !',
-  });
-}
+export async function updateArticle(req: Request, res: Response, next: NextFunction) {
+  try {
+    const articleToUpdate = await ArticleRepository.findOne(req.params.reference);
 
-export function updateArticle(req: Request, res: Response, next: NextFunction) {
-  res.status(500).json({
-    error: 'Not yet implemented !',
-  });
+    if(!articleToUpdate) {
+      return res
+        .status(404)
+        .json({
+          error: 404,
+          param: req.params.reference,
+          message: 'Article not found !'
+        });
+    }
+
+    const article: Article = plainToInstance(Article, {
+      ...articleToUpdate,
+      ...req.body
+    });
+
+    console.log(article)
+
+    const errors: ValidationError[] = await validate(article, { skipMissingProperties: true });
+    if(errors.length > 0) {
+      return res
+        .status(400)
+        .json({
+          error: 400,
+          message: `Article invalidé (échec) : ${ errors.map(error => error.toString()).join(', ') }`
+        });
+    }
+
+    const updatedArticles: Article = await ArticleRepository.save(article);
+    return res
+      .status(201)
+      .json({
+        message: 'Article mis à jour (succès) : ' + updatedArticles.reference,
+      });
+  }
+  catch(error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({
+        error: 500,
+        message: 'Erreur au niveau de votre demande !'
+      });
+  }
 }

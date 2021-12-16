@@ -33,21 +33,21 @@ export class Article {
     unique: true,
   })
   @IsString()
-  @IsAlphanumeric()
+  @Matches(new RegExp('^[a-zA-Z0-9. ]*$'))
   @MaxLength(30)
   @IsDefined()
   designation!: string;
 
   @Column("varchar", { name: "type_fabrication_achat", length: 30 })
   @IsString()
-  @IsAlphanumeric()
+  @Matches(new RegExp('^[a-zA-Z0-9. ]*$'))
   @MaxLength(30)
   @IsDefined()
   typeFabricationAchat!: string;
 
   @Column("varchar", { name: "unite_achat_stock", length: 30 })
   @IsString()
-  @IsAlphanumeric()
+  @Matches(new RegExp('^[a-zA-Z0-9. ]*$'))
   @MaxLength(30)
   @IsDefined()
   uniteAchatStock!: string;
@@ -98,25 +98,40 @@ export class Article {
 
   @OneToMany(
     () => LienDeNomenclature,
-    (lienDeNomenclature) => lienDeNomenclature.composant
+    (lienDeNomenclature) => lienDeNomenclature.composant,
+    {
+      eager: true
+    }
   )
   @ValidateNested()
   composants!: LienDeNomenclature[];
 
   @OneToMany(
     () => LienDeNomenclature,
-    (lienDeNomenclature) => lienDeNomenclature.compose
+    (lienDeNomenclature) => lienDeNomenclature.compose,
+    {
+      eager: true
+    }
   )
   @ValidateNested()
   composes!: LienDeNomenclature[];
 
-  @OneToMany(() => Operation, (operation) => operation.reference)
+  @OneToMany(
+    () => Operation,
+    (operation) => operation.reference,
+    {
+      eager: true
+    }
+  )
   @ValidateNested()
   operations!: Operation[];
 
   @OneToMany(
     () => MouvementDeStock,
-    (mouvementDeStock) => mouvementDeStock.reference
+    (mouvementDeStock) => mouvementDeStock.reference,
+    {
+      eager: true
+    }
   )
   @ValidateNested()
   mouvementDeStocks!: MouvementDeStock[];

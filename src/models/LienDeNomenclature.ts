@@ -17,20 +17,26 @@ export class LienDeNomenclature {
   quantiteDeComposition!: number;
 
   @ManyToOne(() => Article, (article) => article.composants, {
-    onDelete: "CASCADE",
+    onDelete: "CASCADE"
   })
   @JoinColumn([{ name: "composant", referencedColumnName: "reference" }])
   @ValidateNested()
   composant!: Article;
 
   @ManyToOne(() => Article, (article) => article.composes, {
-    onDelete: "CASCADE",
+    onDelete: "CASCADE"
   })
   @JoinColumn([{ name: "compose", referencedColumnName: "reference" }])
   @ValidateNested()
   compose!: Article;
 
-  @OneToMany(() => Remplacement, (remplacement) => remplacement.remplace)
+  @OneToMany(
+    () => Remplacement,
+    (remplacement) => remplacement.remplace,
+    {
+      eager: true
+    }
+  )
   @ValidateNested()
   remplacements!: Remplacement[];
 }
