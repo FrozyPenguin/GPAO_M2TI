@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {
-  MouvementsDeStock,
-  mouvementsDeStock,
-} from '../models/MouvementsDeStocks';
+  MouvementDeStock
+} from '../models/MouvementDeStock';
 
 export function getMouvementsDeStocks(
   req: Request,

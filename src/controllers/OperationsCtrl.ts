@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {
-  Operation,
-  operation,
-} from '../models/Operations';
+  Operation
+} from '../models/Operation';
 
 export function getOperations(
   req: Request,

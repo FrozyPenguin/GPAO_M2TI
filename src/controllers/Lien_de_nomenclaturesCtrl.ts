@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {
-  LienDeNomenclature,
-  lienDeNomenclature,
-} from '../models/Lien_de_nomenclatures';
+  LienDeNomenclature
+} from '../models/LienDeNomenclature';
 
 export function getLienDeNomenclatures(
   req: Request,

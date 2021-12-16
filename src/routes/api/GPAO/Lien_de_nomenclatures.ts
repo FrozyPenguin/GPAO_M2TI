@@ -14,15 +14,15 @@ router.get('/', getLienDeNomenclatures);
 
 // Test: 'curl http://localhost:3000/api/GPAO/LienDeNomenclatures/CD100'
 // TODO: Voir comment on peut filtrer
-router.get(':reference', getLienDeNomenclature);
+router.get('/:reference', getLienDeNomenclature);
 
 // Test: 'curl http://localhost:3000/api/GPAO/LienDeNomenclatures/add'
-router.post('add', addLienDeNomenclature);
+router.post('/add', addLienDeNomenclature);
 
 // TODO: Voir comment on peut filtrer
-router.put(':reference', updateLienDeNomenclature);
+router.put('/:reference', updateLienDeNomenclature);
 
 // TODO: Voir comment on peut filtrer
-router.delete(':reference', deleteLienDeNomenclature);
+router.delete('/:reference', deleteLienDeNomenclature);
 
 export default router;

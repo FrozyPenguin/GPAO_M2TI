@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Remplacement } from '../models/Remplacements';
+import { Remplacement } from '../models/Remplacement';
 
 export function getRemplacements(
   req: Request,

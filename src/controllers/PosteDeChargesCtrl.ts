@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {
-  PosteDeCharge,
-  posteDeCharge,
-} from '../models/PosteDeCharges';
+  PosteDeCharge
+} from '../models/PosteDeCharge';
 
 export function getPosteDeCharges(
   req: Request,

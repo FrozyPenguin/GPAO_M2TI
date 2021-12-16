@@ -14,15 +14,15 @@ router.get('/', getPosteDeCharges);
 
 // Test: 'curl http://localhost:3000/api/GPAO/PosteDeCharges/CD100'
 // TODO: Voir comment on peut filtrer
-router.get(':reference', getPosteDeCharge);
+router.get('/:reference', getPosteDeCharge);
 
 // Test: 'curl http://localhost:3000/api/GPAO/PosteDeCharges/add'
-router.post('add', addPosteDeCharge);
+router.post('/add', addPosteDeCharge);
 
 // TODO: Voir comment on peut filtrer
-router.put(':reference', updatePosteDeCharge);
+router.put('/:reference', updatePosteDeCharge);
 
 // TODO: Voir comment on peut filtrer
-router.delete(':reference', deletePosteDeCharge);
+router.delete('/:reference', deletePosteDeCharge);
 
 export default router;
