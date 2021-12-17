@@ -1,4 +1,3 @@
-import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import { Article } from '../../models/Article';
@@ -18,7 +17,10 @@ export async function updateLienDeNomenclature(
 ) {
   try {
     const lienToUpdate = await LienDeNomenclatureRepository.findOne(
-      req.params.id
+      req.params.id,
+      {
+        relations: ['compose', 'composant', 'remplacements'],
+      }
     );
 
     if (!lienToUpdate) {
@@ -47,8 +49,8 @@ export async function updateLienDeNomenclature(
 
     if (body.compose) {
       const articleCompose = await ArticleRepository.findOne(body.compose);
-      if (articleCompose) body.compose = articleCompose;
-      else {
+      // if (articleCompose) body.compose = articleCompose;
+      if (!articleCompose) {
         combinationError.error = true;
         combinationError.causeBy.push(body.compose);
       }
@@ -56,8 +58,8 @@ export async function updateLienDeNomenclature(
 
     if (body.composant) {
       const articleComposant = await ArticleRepository.findOne(body.composant);
-      if (articleComposant) body.composant = articleComposant;
-      else {
+      // if (articleComposant) body.composant = articleComposant;
+      if (!articleComposant) {
         combinationError.error = true;
         combinationError.causeBy.push(body.composant);
       }
@@ -72,12 +74,10 @@ export async function updateLienDeNomenclature(
       });
     }
 
-    const lien: LienDeNomenclature = plainToInstance(LienDeNomenclature, {
+    const lien: LienDeNomenclature = LienDeNomenclatureRepository.create({
       ...lienToUpdate,
       ...body,
-    });
-
-    console.log(lien);
+    } as LienDeNomenclature);
 
     const errors: ValidationError[] = await validate(lien, {
       skipMissingProperties: true,
@@ -97,7 +97,6 @@ export async function updateLienDeNomenclature(
       message: `Lien mis à jour (succès) : ${updatedLien.lienDeNomenclatureId}`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',
@@ -112,14 +111,19 @@ export async function updateLienDeNomenclatureByCompositeKey(
   next: NextFunction
 ) {
   try {
-    const lienToUpdate = await LienDeNomenclatureRepository.findOne({
-      composant: {
-        reference: req.params.composant,
+    const lienToUpdate = await LienDeNomenclatureRepository.findOne(
+      {
+        composant: {
+          reference: req.params.composant,
+        },
+        compose: {
+          reference: req.params.compose,
+        },
       },
-      compose: {
-        reference: req.params.compose,
-      },
-    });
+      {
+        relations: ['compose', 'composant', 'remplacements'],
+      }
+    );
 
     if (!lienToUpdate) {
       return res.status(404).json({
@@ -147,8 +151,8 @@ export async function updateLienDeNomenclatureByCompositeKey(
 
     if (body.compose) {
       const articleCompose = await ArticleRepository.findOne(body.compose);
-      if (articleCompose) body.compose = articleCompose;
-      else {
+      // if (articleCompose) body.compose = articleCompose;
+      if (!articleCompose) {
         combinationError.error = true;
         combinationError.causeBy.push(body.compose);
       }
@@ -156,15 +160,14 @@ export async function updateLienDeNomenclatureByCompositeKey(
 
     if (body.composant) {
       const articleComposant = await ArticleRepository.findOne(body.composant);
-      if (articleComposant) body.composant = articleComposant;
-      else {
+      // if (articleComposant) body.composant = articleComposant;
+      if (!articleComposant) {
         combinationError.error = true;
         combinationError.causeBy.push(body.composant);
       }
     }
 
     if (combinationError.error) {
-      console.log(combinationError);
       return res.status(404).json({
         error: 404,
         message: `Compose et/ou composant introuvable (échec) : ${combinationError.causeBy.join(
@@ -173,10 +176,10 @@ export async function updateLienDeNomenclatureByCompositeKey(
       });
     }
 
-    const lien: LienDeNomenclature = plainToInstance(LienDeNomenclature, {
+    const lien: LienDeNomenclature = LienDeNomenclatureRepository.create({
       ...lienToUpdate,
       ...body,
-    });
+    } as LienDeNomenclature);
 
     const errors: ValidationError[] = await validate(lien, {
       skipMissingProperties: true,
@@ -190,28 +193,17 @@ export async function updateLienDeNomenclatureByCompositeKey(
       });
     }
 
-    const result = await LienDeNomenclatureRepository.update(
-      {
-        composant: {
-          reference: req.params.composant,
-        },
-        compose: {
-          reference: req.params.compose,
-        },
-      },
-      lien
-    );
+    const result = await LienDeNomenclatureRepository.save(lien);
 
-    if (!result.affected || result.affected < 1) throw new Error('Not saved');
+    // if (!result.affected || result.affected < 1) throw new Error('Not saved');
 
     return res.status(201).json({
       message: `Lien mis à jour (succès) : ${
-        `${lien.compose.reference}, ${lien.composant.reference}` ||
+        `${result.compose.reference}, ${result.composant.reference}` ||
         `${req.params.compose}, ${req.params.composant}`
       }`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',

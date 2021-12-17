@@ -11,7 +11,6 @@ export function getArticles(req: Request, res: Response, next: NextFunction) {
   })
     .then((articles) => res.status(200).json(articles))
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -34,7 +33,6 @@ export function getArticle(req: Request, res: Response, next: NextFunction) {
       res.status(200).json(article);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',

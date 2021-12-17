@@ -13,6 +13,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { Operation } from './Operation';
 
@@ -21,11 +22,11 @@ import { Operation } from './Operation';
 @Check(
   `"type_taux_horaire_ou_forfait" = 'TH' or "type_taux_horaire_ou_forfait" = 'F'`
 )
+@Unique(['numeroSection', 'numeroSousSection', 'machine'])
 export class PosteDeCharge {
   @PrimaryGeneratedColumn({ name: 'poste_de_charge_id' })
   @IsNumber()
   @IsInt()
-  @IsDefined() // Peut etre enlever puisqu'il est censé autoinc
   posteDeChargeId!: number;
 
   @Column('integer', { name: 'numero_section' })

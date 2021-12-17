@@ -21,7 +21,6 @@ export class Remplacement {
   @JoinColumn([
     { name: 'remplace', referencedColumnName: 'lienDeNomenclatureId' },
   ])
-  @ValidateNested()
   @IsDefined()
   remplace!: LienDeNomenclature;
 
@@ -33,7 +32,6 @@ export class Remplacement {
   @JoinColumn([
     { name: 'remplacant', referencedColumnName: 'lienDeNomenclatureId' },
   ])
-  @ValidateNested()
   @IsDefined()
   remplacant!: LienDeNomenclature;
 

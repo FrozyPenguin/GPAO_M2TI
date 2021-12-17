@@ -90,8 +90,8 @@ create table Poste_de_charge (
 	type_taux_horaire_ou_forfait varchar(2),
 	constraint Poste_de_charge_pk primary key(poste_de_charge_id),
 	constraint Poste_de_charge_check_1 check(machine = 0 or machine = 1),
-	constraint Poste_de_charge_check_2 check(type_taux_horaire_ou_forfait = 'TH' or type_taux_horaire_ou_forfait = 'F')
-
+	constraint Poste_de_charge_check_2 check(type_taux_horaire_ou_forfait = 'TH' or type_taux_horaire_ou_forfait = 'F'),
+	constraint Unique_composite unique(numero_section, numero_sous_section, machine)
 );
 
 create table Operation (
@@ -107,15 +107,24 @@ create table Operation (
 	constraint Operation_fk1 foreign key(reference) references Article(reference) on delete cascade,
 	constraint Main_d_oeuvre_fk foreign key(main_d_oeuvre) references Poste_de_charge(poste_de_charge_id) on delete cascade,
 	constraint Machine_fk foreign key(machine) references Poste_de_charge(poste_de_charge_id) on delete cascade,
-	constraint Operation_check_machine_main_oeuvre check(ifnull(main_d_oeuvre, machine) <> NULL) -- TODO: a vérifier
+	--constraint Operation_check_machine_main_oeuvre check(ifnull(main_d_oeuvre, machine) <> NULL)
+	-- constraint Operation_check_machine_main_oeuvre check(if(main_d_oeuvre is null) machine is not null)
+	constraint Operation_check_machine_main_oeuvre check(
+		(main_d_oeuvre is null and machine is not null)
+		or
+		(machine is null and main_d_oeuvre is not null)
+		or
+		(machine is not null and main_d_oeuvre is not null)
+	) -- ca ça marche
+	constraint Operation_check_machine_main_oeuvre_diff check(main_d_oeuvre <> machine)
 );
 
 create table Mouvement_de_stock (
 	reference varchar(30) not null,
 	numero_magasin INTEGER not null,
 	quantite INTEGER not null,
-	periode DATETIME not null,
-	entree_ou_sortie INTEGER not null, -- TODO: Regle Joi
+	periode TEXT not null,
+	entree_ou_sortie INTEGER not null,
 	constraint Mouvement_de_stock_pk primary key(reference, periode, entree_ou_sortie),
 	constraint Mouvement_de_stock_fk foreign key(reference) references Article(reference) on delete cascade,
 	constraint Mouvement_de_stock_check check(entree_ou_sortie = 0 or entree_ou_sortie = 1)
@@ -144,12 +153,18 @@ where ln1.compose = 'CD100' and ln2.compose = 'CD100' and ln1.composant = 'H000'
 
 insert into Poste_de_charge values(null,500,450,1,'Rectifieuse',80,1,39,'TH');
 insert into Poste_de_charge values(null,500,450,0,'Rectifieur',80,1,39,'TH');
+insert into Poste_de_charge values(null,550,450,0,'test1Poste',80,1,39,'TH');
+insert into Poste_de_charge values(null,600,500,0,'test2Poste',80,1,39,'TH');
+insert into Poste_de_charge values(null,500,800,1,'test3Poste',80,1,39,'TH');
 
 insert into Operation
 select 'ES000',20,0.5,0.05,0.2,'Rectification',main_d_oeuvre.poste_de_charge_id,machine.poste_de_charge_id
 from Poste_de_charge as machine,Poste_de_charge as main_d_oeuvre
 where machine.designation = 'Rectifieuse' and main_d_oeuvre.designation = 'Rectifieur';
+insert into Operation values('ROUE50',30,0.5,0.05,0.2,'test1Operation',3,5);
+insert into Operation values('ROUE50',40,0.5,0.05,0.2,'test2Operation',4,5);
+insert into Operation values('ROUE50',50,0.5,0.05,0.2,'test3Operation',4,3);
 
-insert into Mouvement_de_stock values('ROUE50', 3, 30, datetime('now'), 1);
+insert into Mouvement_de_stock values('ROUE50', 3, 30, '2021-12-17T04:53:59.000Z', 1);
 insert into Mouvement_de_stock values('CH005', 1, 20, '2021-12-17T04:53:52.000Z', 0);
-insert into Mouvement_de_stock values('CD100', 3, 40, datetime('now'), 1);
+insert into Mouvement_de_stock values('CD100', 3, 40, '2021-12-17T04:53:55.000Z', 1);

@@ -1,4 +1,3 @@
-import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
@@ -35,7 +34,6 @@ export async function deleteLienDeNomenclature(
         req.params.id,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',
@@ -77,7 +75,6 @@ export async function deleteLienDeNomenclatureByCompositeKey(
       }`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',

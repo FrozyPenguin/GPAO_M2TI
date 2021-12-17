@@ -16,6 +16,7 @@ import {
   CreateDateColumn,
   Check,
   PrimaryColumn,
+  Generated,
 } from 'typeorm';
 import { Article } from './Article';
 
@@ -42,9 +43,7 @@ export class MouvementDeStock {
   @IsDefined()
   quantite!: number;
 
-  // Ca je sais pas
-  //@PrimaryColumn('datetime', { name: 'periode' })
-  @CreateDateColumn({ primary: true, name: 'periode' })
+  @PrimaryColumn('text', { name: 'periode' })
   @IsDateString()
   periode!: Date;
 

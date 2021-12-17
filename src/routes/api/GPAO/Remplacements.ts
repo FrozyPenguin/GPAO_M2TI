@@ -2,7 +2,9 @@ import { Router } from 'express';
 import { deleteRemplacement } from '../../../controllers/Remplacement/DeleteCtrl';
 import {
   getRemplacements,
-  getRemplacement,
+  getRemplacementsByRemplace,
+  getRemplacementsByRemplacant,
+  getRemplacementsByComposite,
 } from '../../../controllers/Remplacement/GetCtrl';
 import { addRemplacement } from '../../../controllers/Remplacement/PostCtrl';
 import { updateRemplacement } from '../../../controllers/Remplacement/PutCtrl';
@@ -13,16 +15,20 @@ const router = Router();
 router.get('/', getRemplacements);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Remplacements/CD100'
-// TODO: Voir comment on peut filtrer
-router.get('/:reference', getRemplacement);
+router.get('/remplace/:remplace', getRemplacementsByRemplace);
+
+router.get('/remplacant/:remplacant', getRemplacementsByRemplacant);
+
+router.get(
+  '/remplace/:remplace/remplacant/:remplacant',
+  getRemplacementsByComposite
+);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Remplacements/add'
 router.post('/add', addRemplacement);
 
-// TODO: Voir comment on peut filtrer
-router.put('/:reference', updateRemplacement);
+router.put('/remplace/:remplace/remplacant/:remplacant', updateRemplacement);
 
-// TODO: Voir comment on peut filtrer
-router.delete('/:reference', deleteRemplacement);
+router.delete('/remplace/:remplace/remplacant/:remplacant', deleteRemplacement);
 
 export default router;

@@ -19,14 +19,16 @@ import {
 } from 'class-validator';
 
 @Entity('Operation')
-@Check(`ifnull("main_d_oeuvre", "machine") <> NULL`)
+@Check(
+  `("main_d_oeuvre" is null and "machine" is not null) or ("machine" is null and "main_d_oeuvre" is not null) or ("machine" is not null and "main_d_oeuvre" is not null)`
+)
+@Check(`"main_d_oeuvre" <> "machine"`)
 export class Operation {
   @ManyToOne(() => Article, (article) => article.operations, {
     onDelete: 'CASCADE',
     primary: true,
   })
   @JoinColumn([{ name: 'reference', referencedColumnName: 'reference' }])
-  @ValidateNested()
   @IsDefined()
   reference!: Article;
 
@@ -38,17 +40,14 @@ export class Operation {
 
   @Column('float', { name: 'temps_preparation', nullable: true })
   @IsNumber()
-  @IsDecimal()
   tempsPreparation!: number | null;
 
   @Column('float', { name: 'temps_execution', nullable: true })
   @IsNumber()
-  @IsDecimal()
   tempsExecution!: number | null;
 
   @Column('float', { name: 'temps_transfert', nullable: true })
   @IsNumber()
-  @IsDecimal()
   tempsTransfert!: number | null;
 
   @Column('varchar', { name: 'libelle_operation', length: 30 })
@@ -60,7 +59,6 @@ export class Operation {
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'machine', referencedColumnName: 'posteDeChargeId' }])
-  @ValidateNested()
   machine!: PosteDeCharge;
 
   @ManyToOne(
@@ -73,6 +71,5 @@ export class Operation {
   @JoinColumn([
     { name: 'main_d_oeuvre', referencedColumnName: 'posteDeChargeId' },
   ])
-  @ValidateNested()
   mainDOeuvre!: PosteDeCharge;
 }

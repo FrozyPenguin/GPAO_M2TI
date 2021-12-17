@@ -2,18 +2,17 @@ import { Article } from '../../models/Article';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
-import { plainToInstance } from 'class-transformer';
 
 const ArticleRepository: Repository<Article> = getRepository(Article);
 
-// TODO: Pour faire des ajout encapsulé peut etre problème
 export async function addArticle(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   // console.log(JSON.stringify(request.body));
-  const article: Article = plainToInstance(Article, req.body);
+  // const article: Article = plainToInstance(Article, req.body);
+  const article: Article = ArticleRepository.create(req.body as Article);
 
   try {
     const errors: ValidationError[] = await validate(article, {

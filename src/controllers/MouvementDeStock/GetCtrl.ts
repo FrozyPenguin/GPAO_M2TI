@@ -14,7 +14,6 @@ export function getMouvementsDeStocks(
   })
     .then((mouvements) => res.status(200).json(mouvements))
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -35,7 +34,6 @@ export function getMouvementsDeStocksByRef(
   })
     .then((mouvements) => res.status(200).json(mouvements))
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -56,7 +54,6 @@ export function getMouvementsDeStocksByPeriod(
   })
     .then((mouvements) => res.status(200).json(mouvements))
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -91,7 +88,6 @@ export function getMouvementsDeStockByComposite(
       res.status(200).json(mouvement);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',

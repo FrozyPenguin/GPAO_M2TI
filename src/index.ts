@@ -8,6 +8,8 @@ import recursiveTreeReader from './utils/recursiveTreeReader';
 import posixNormalize from './utils/posixNormalize';
 import print from './utils/printAllExpressRoutes';
 
+export const production = false;
+
 const PORT = process.env.PORT || 3000;
 
 let app = null;

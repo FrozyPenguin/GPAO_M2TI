@@ -2,7 +2,9 @@ import { Router } from 'express';
 import { deleteOperation } from '../../../controllers/Operation/DeleteCtrl';
 import {
   getOperations,
-  getOperation,
+  getOperationByRef,
+  getOperationByOp,
+  getOperationByComposite,
 } from '../../../controllers/Operation/GetCtrl';
 import { addOperation } from '../../../controllers/Operation/PostCtrl';
 import { updateOperation } from '../../../controllers/Operation/PutCtrl';
@@ -13,16 +15,20 @@ const router = Router();
 router.get('/', getOperations);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Operations/CD100'
-// TODO: Voir comment on peut filtrer
-router.get('/:reference', getOperation);
+router.get('/reference/:reference', getOperationByRef);
+
+router.get('/operation/:operation', getOperationByOp);
+
+router.get(
+  '/reference/:reference/operation/:operation',
+  getOperationByComposite
+);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Operations/add'
 router.post('/add', addOperation);
 
-// TODO: Voir comment on peut filtrer
-router.put('/:reference', updateOperation);
+router.put('/reference/:reference/operation/:operation', updateOperation);
 
-// TODO: Voir comment on peut filtrer
-router.delete('/:reference', deleteOperation);
+router.delete('/reference/:reference/operation/:operation', deleteOperation);
 
 export default router;

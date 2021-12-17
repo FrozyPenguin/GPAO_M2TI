@@ -2,7 +2,6 @@ import { Article } from '../../models/Article';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
-import { plainToInstance } from 'class-transformer';
 
 const ArticleRepository: Repository<Article> = getRepository(Article);
 
@@ -13,7 +12,15 @@ export async function updateArticle(
 ) {
   try {
     const articleToUpdate = await ArticleRepository.findOne(
-      req.params.reference
+      req.params.reference,
+      {
+        relations: [
+          'composes',
+          'composants',
+          'operations',
+          'mouvementDeStocks',
+        ],
+      }
     );
 
     if (!articleToUpdate) {
@@ -24,12 +31,10 @@ export async function updateArticle(
       });
     }
 
-    const article: Article = plainToInstance(Article, {
+    const article: Article = ArticleRepository.create({
       ...articleToUpdate,
       ...req.body,
-    });
-
-    console.log(article);
+    } as Article);
 
     const errors: ValidationError[] = await validate(article, {
       skipMissingProperties: true,
@@ -43,18 +48,14 @@ export async function updateArticle(
       });
     }
 
-    const result = await ArticleRepository.update(
-      req.params.reference,
-      article
-    );
+    const result = await ArticleRepository.save(article);
 
-    if (!result.affected || result.affected < 1) throw new Error('Not saved');
+    // if (!result.affected || result.affected < 1) throw new Error('Not saved');
 
     return res.status(201).json({
-      message: 'Article mis à jour (succès) : ' + article.reference,
+      message: 'Article mis à jour (succès) : ' + result.reference,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',

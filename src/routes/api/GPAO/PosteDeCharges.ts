@@ -1,28 +1,59 @@
 import { Router } from 'express';
-import { deletePosteDeCharge } from '../../../controllers/PosteDeCharge/DeleteCtrl';
+import {
+  deletePosteDeCharge,
+  deletePosteDeChargeByComposite,
+} from '../../../controllers/PosteDeCharge/DeleteCtrl';
 import {
   getPosteDeCharges,
-  getPosteDeCharge,
+  getPosteDeChargeById,
+  getPosteDeChargeByNSection,
+  getPosteDeChargeByNSousSection,
+  getPosteDeChargeByMachine,
+  getPosteDeChargeByComposite,
 } from '../../../controllers/PosteDeCharge/GetCtrl';
 import { addPosteDeCharge } from '../../../controllers/PosteDeCharge/PostCtrl';
-import { updatePosteDeCharge } from '../../../controllers/PosteDeCharge/PutCtrl';
+import {
+  updatePosteDeCharge,
+  updatePosteDeChargeByComposite,
+} from '../../../controllers/PosteDeCharge/PutCtrl';
 
 const router = Router();
 
-// Test: 'curl http://localhost:3000/api/GPAO/PosteDeCharges'
+// -------------------------------------------------
+//                    Get Multiple
+// -------------------------------------------------
 router.get('/', getPosteDeCharges);
 
-// Test: 'curl http://localhost:3000/api/GPAO/PosteDeCharges/CD100'
-// TODO: Voir comment on peut filtrer
-router.get('/:reference', getPosteDeCharge);
+router.get('/nsection/:nsection', getPosteDeChargeByNSection);
 
-// Test: 'curl http://localhost:3000/api/GPAO/PosteDeCharges/add'
+router.get('/nsoussection/:nsoussection', getPosteDeChargeByNSousSection);
+
+router.get('/machine/:machine', getPosteDeChargeByMachine);
+
+// -------------------------------------------------
+//                    Get Single
+// -------------------------------------------------
+router.get('/id/:id', getPosteDeChargeById);
+
+router.get(
+  '/nsection/:nsection/nsoussection/:nsoussection/machine/:machine',
+  getPosteDeChargeByComposite
+);
+
 router.post('/add', addPosteDeCharge);
 
-// TODO: Voir comment on peut filtrer
-router.put('/:reference', updatePosteDeCharge);
+router.put('/id/:id', updatePosteDeCharge);
 
-// TODO: Voir comment on peut filtrer
-router.delete('/:reference', deletePosteDeCharge);
+router.put(
+  '/nsection/:nsection/nsoussection/:nsoussection/machine/:machine',
+  updatePosteDeChargeByComposite
+);
+
+router.delete('/id/:id', deletePosteDeCharge);
+
+router.delete(
+  '/nsection/:nsection/nsoussection/:nsoussection/machine/:machine',
+  deletePosteDeChargeByComposite
+);
 
 export default router;

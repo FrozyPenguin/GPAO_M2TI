@@ -17,7 +17,6 @@ export function getLienDeNomenclatures(
   })
     .then((lien) => res.status(200).json(lien))
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -43,7 +42,6 @@ export function getLienDeNomenclaturesByComposant(
       res.status(200).json(liens);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -69,7 +67,6 @@ export function getLienDeNomenclaturesByCompose(
       res.status(200).json(liens);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -100,7 +97,6 @@ export function getLienDeNomenclature(
       res.status(200).json(lien);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',
@@ -138,7 +134,6 @@ export function getLienDeNomenclatureByCompositeKey(
       res.status(200).json(lien);
     })
     .catch((error) => {
-      console.error(error);
       return res.status(500).json({
         error: 500,
         message: 'Erreur au niveau de votre demande !',

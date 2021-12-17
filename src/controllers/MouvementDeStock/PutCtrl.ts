@@ -1,7 +1,6 @@
 import { MouvementDeStock } from './../../models/MouvementDeStock';
 import { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { plainToInstance } from 'class-transformer';
+import { getRepository, Raw } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
 import { Article } from './../../models/Article';
 
@@ -45,11 +44,11 @@ export async function updateMouvementsDeStock(
       });
     }
 
-    const mouvement: MouvementDeStock = plainToInstance(MouvementDeStock, {
+    const mouvement: MouvementDeStock = MouvementDeStockRepository.create({
       ...mouvementToUpdate,
       ...body,
-      periode: mouvementToUpdate.periode.toISOString(),
-    });
+      // periode: mouvementToUpdate.periode.toISOString(),
+    } as MouvementDeStock);
 
     const errors: ValidationError[] = await validate(mouvement, {
       skipMissingProperties: true,
@@ -57,7 +56,7 @@ export async function updateMouvementsDeStock(
     if (errors.length > 0) {
       return res.status(400).json({
         error: 400,
-        message: `Lien invalidé (échec) : ${errors
+        message: `Mouvement invalidé (échec) : ${errors
           .map((error) => error.toString())
           .join(', ')}`,
       });
@@ -76,13 +75,12 @@ export async function updateMouvementsDeStock(
     if (!result.affected || result.affected < 1) throw new Error('Not saved');
 
     return res.status(201).json({
-      message: `Lien mis à jour (succès) : ${
+      message: `Mouvement mis à jour (succès) : ${
         `${mouvement.reference}, ${mouvement.periode}` ||
         `${req.params.reference}, ${req.params.periode}`
       }`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',

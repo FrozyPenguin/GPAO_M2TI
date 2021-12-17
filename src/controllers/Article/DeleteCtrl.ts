@@ -27,7 +27,6 @@ export async function deleteArticle(
       }`,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: 500,
       message: 'Erreur au niveau de votre demande !',
