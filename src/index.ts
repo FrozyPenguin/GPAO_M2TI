@@ -55,7 +55,10 @@ let app = null;
 
   // Importation automatique des routes
   const routesFolder = path.join(__dirname, 'routes');
-  const routes: string[] = await recursiveTreeReader(routesFolder, process.env.PRODUCTION ? '.js' : '.ts');
+  const routes: string[] = await recursiveTreeReader(
+    routesFolder,
+    process.env.PRODUCTION ? '.js' : '.ts'
+  );
   for (let route of routes) {
     // Suppréssion de l'extension
     route = route.replace(/\.[^/.]+$/, '');

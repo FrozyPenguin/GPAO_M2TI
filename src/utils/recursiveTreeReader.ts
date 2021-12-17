@@ -35,7 +35,6 @@ const recursiveTreeReader = (
         reject(error);
       }
 
-
       if (fileStat?.isDirectory()) {
         const recursivePath: Array<string> = (await recursiveTreeReader(
           filePath,
