@@ -7,7 +7,7 @@
     "rootDir": "./src",
     "sourceMap": false,
     "strictNullChecks": true,
-    "target": "esnext",
+    "target": "es6",
     "strict": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,

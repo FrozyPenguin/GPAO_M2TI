@@ -1,4 +1,3 @@
-import { production } from './../index';
 import 'reflect-metadata';
 import { createConnection, ConnectionOptions, Connection } from 'typeorm';
 import * as path from 'path';
@@ -8,7 +7,7 @@ let connection: Connection | null;
 
 async function connect() {
   try {
-    if (!production) {
+    if (!process.env.PRODUCTION) {
       await resetDatabase(
         path.resolve(__dirname, './gpao.sqlite'),
         path.resolve(__dirname, './GPAO.SQLite_creation.sql')

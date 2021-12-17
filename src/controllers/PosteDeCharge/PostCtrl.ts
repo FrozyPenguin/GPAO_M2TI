@@ -2,7 +2,7 @@ import { validate, ValidationError } from 'class-validator';
 import { PosteDeCharge } from './../../models/PosteDeCharge';
 import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { Operation } from 'src/models/Operation';
+import { Operation } from './../../models/Operation';
 
 const PosteDeChargeRepository = getRepository(PosteDeCharge);
 

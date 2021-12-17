@@ -35,14 +35,15 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "comp": "tsc && npm run copysql",
-    "start": "node ./dist/index.js",
+    "comp": "tsc && npm run copysql && npm run db:reset",
+    "start": "env PRODUCTION=true node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "tslint": "tslint --project tsconfig.json",
     "prettier:base": "prettier --parser typescript",
     "prettier:check": "npm run prettier:base -- --check \"./src/**/*.{ts,tsx}\"",
     "prettier:write": "npm run prettier:base -- --write \"./src/**/*.{ts,tsx}\"",
-    "db:reset": "ts-node src/database/dbLoader.ts",
+    "db:resetDev": "ts-node src/database/dbLoader.ts",
+    "db:reset": "node dist/database/dbLoader.js",
     "copysql": "copyfiles -u 1 ./src/database/*.sql dist"
   },
   "husky": {

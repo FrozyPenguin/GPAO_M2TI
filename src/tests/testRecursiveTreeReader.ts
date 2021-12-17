@@ -1,5 +1,5 @@
 import recursiveTreeReader from '../utils/recursiveTreeReader';
 
 (async () => {
-  console.log(await recursiveTreeReader('../routes'));
+  console.log(await recursiveTreeReader('../routes', '.ts'));
 })();
