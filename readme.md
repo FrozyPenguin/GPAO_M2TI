@@ -13,7 +13,7 @@ Toutes les routes sont définies dans le dossier __"routes"__, séparées selon 
 Pour les modèles et la connection à la base de donnée nous avons utilisé **TypeORM** ainsi que **class_validator** pour les vérifications de données insérées.
 
 Nous avons utilisé **ts-node** pour travailler en TypeScript sans avoir à recompiler manuellement le code et nodemon pour relancer le serveur automatiquement après chaque modification.
-Enfin, Il est possible d'accéder à la définition des routes à l'adresse 127.0.0.0:3000/swagger.
+Enfin, Il est possible d'accéder à la définition des routes à l'adresse __**http://127.0.0.0:3000/swagger**__.
 
 # Execution
 
