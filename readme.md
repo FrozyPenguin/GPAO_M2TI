@@ -1,3 +1,18 @@
+# Introduction
+
+Pour ce projet nous avons choisi d'utiliser une base de données SQLite.
+Pour ceci, nous avons étudié le cachier des charges ainsi que le scritp sql Oracle fourni afin de préparer un script de création adapté à SQLite adapté.
+
+La base de données est regénérée à chaque lancement du serveur en suivant les fichiers GPAO_SQLite_Creation.sql et GPAO_SQLite_Deletion.sql.
+
+En utilisant Insomnia, nous pouvons tester les différentes routes du service afin d'en voir les fonctionnalités. 
+Le fichier JSON Insomnia_2021-12-17.json peut être importé afin de directement pouvoir utiliser nos requêtes de test.
+
+Toutes les routes sont définies dans le dossier Route, séparées selon les modèles concernés.
+Pour les modèles nous avons utilisé TypeORM ainsi que class validator pour les vérifications de données.
+
+
+
 # Routes List
 
 

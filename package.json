@@ -35,7 +35,7 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "comp": "tsc && npm run copysql && npm run db:reset",
+    "comp": "tsc && npm run copysql && npm run copypublic && npm run db:reset",
     "start": "env PRODUCTION=true node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "tslint": "tslint --project tsconfig.json",
@@ -44,7 +44,8 @@
     "prettier:write": "npm run prettier:base -- --write \"./src/**/*.{ts,tsx}\"",
     "db:resetDev": "ts-node src/database/dbLoader.ts",
     "db:reset": "node dist/database/dbLoader.js",
-    "copysql": "copyfiles -u 1 ./src/database/*.sql dist"
+    "copysql": "copyfiles -u 1 ./src/database/*.sql dist",
+    "copypublic": "copyfiles -u 1 ./src/public/**/* dist"
   },
   "husky": {
     "hooks": {

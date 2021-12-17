@@ -69,6 +69,9 @@ let app = null;
     app.use(`/${posixNormalize(route)}`, router);
   }
 
+  // Swagger
+  app.use('/swagger', Express.static(path.resolve(__dirname, './public')));
+
   // Traitement des erreurs
   app.use(
     (
