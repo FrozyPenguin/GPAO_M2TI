@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import { deleteOperation } from '../../../controllers/Operation/DeleteCtrl';
 import {
-  addOperation,
-  deleteOperation,
-  getOperation,
   getOperations,
-  updateOperation,
-} from '../../../controllers/OperationsCtrl';
+  getOperation,
+} from '../../../controllers/Operation/GetCtrl';
+import { addOperation } from '../../../controllers/Operation/PostCtrl';
+import { updateOperation } from '../../../controllers/Operation/PutCtrl';
 
 const router = Router();
 

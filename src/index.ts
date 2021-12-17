@@ -18,8 +18,7 @@ let app = null;
   // Connection à la bdd
   try {
     await connect();
-  }
-  catch(e) {
+  } catch (e) {
     console.error('Impossible de se connecter à la base de donnée');
     process.exit(1);
   }

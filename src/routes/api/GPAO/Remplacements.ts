@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import { deleteRemplacement } from '../../../controllers/Remplacement/DeleteCtrl';
 import {
-  addRemplacement,
-  deleteRemplacement,
-  getRemplacement,
   getRemplacements,
-  updateRemplacement,
-} from '../../../controllers/RemplacementsCtrl';
+  getRemplacement,
+} from '../../../controllers/Remplacement/GetCtrl';
+import { addRemplacement } from '../../../controllers/Remplacement/PostCtrl';
+import { updateRemplacement } from '../../../controllers/Remplacement/PutCtrl';
 
 const router = Router();
 

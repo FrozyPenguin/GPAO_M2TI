@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import { deletePosteDeCharge } from '../../../controllers/PosteDeCharge/DeleteCtrl';
 import {
-  addPosteDeCharge,
-  deletePosteDeCharge,
-  getPosteDeCharge,
   getPosteDeCharges,
-  updatePosteDeCharge,
-} from '../../../controllers/PosteDeChargesCtrl';
+  getPosteDeCharge,
+} from '../../../controllers/PosteDeCharge/GetCtrl';
+import { addPosteDeCharge } from '../../../controllers/PosteDeCharge/PostCtrl';
+import { updatePosteDeCharge } from '../../../controllers/PosteDeCharge/PutCtrl';
 
 const router = Router();
 

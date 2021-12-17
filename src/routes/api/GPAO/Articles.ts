@@ -1,11 +1,8 @@
 import { Router } from 'express';
-import {
-  addArticle,
-  deleteArticle,
-  getArticle,
-  getArticles,
-  updateArticle,
-} from '../../../controllers/ArticlesCtrl';
+import { addArticle } from '../../../controllers/Article/PostCtrl';
+import { getArticle, getArticles } from '../../../controllers/Article/GetCtrl';
+import { deleteArticle } from '../../../controllers/Article/DeleteCtrl';
+import { updateArticle } from '../../../controllers/Article/PutCtrl';
 
 const router = Router();
 

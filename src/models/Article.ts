@@ -1,8 +1,20 @@
-import { Check, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
-import { LienDeNomenclature } from "./LienDeNomenclature";
-import { Operation } from "./Operation";
-import { MouvementDeStock } from "./MouvementDeStock";
-import { IsAlphanumeric, IsDecimal, IsDefined, IsEnum, IsInt, IsNumber, IsString, Length, Matches, MaxLength, ValidateNested } from "class-validator";
+import { Check, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { LienDeNomenclature } from './LienDeNomenclature';
+import { Operation } from './Operation';
+import { MouvementDeStock } from './MouvementDeStock';
+import {
+  IsAlphanumeric,
+  IsDecimal,
+  IsDefined,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsString,
+  Length,
+  Matches,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 
 export enum ArticleType {
   MP = 'MP',
@@ -11,12 +23,14 @@ export enum ArticleType {
   SE = 'SE',
 }
 
-@Entity("Article")
-@Check(`"PF_ou_MP_ou_Pi_ou_SE" = 'PF' or "PF_ou_MP_ou_Pi_ou_SE" = 'MP' or "PF_ou_MP_ou_Pi_ou_SE" = 'Pi' or "PF_ou_MP_ou_Pi_ou_SE" = 'SE'`)
+@Entity('Article')
+@Check(
+  `"PF_ou_MP_ou_Pi_ou_SE" = 'PF' or "PF_ou_MP_ou_Pi_ou_SE" = 'MP' or "PF_ou_MP_ou_Pi_ou_SE" = 'Pi' or "PF_ou_MP_ou_Pi_ou_SE" = 'SE'`
+)
 export class Article {
-  @PrimaryColumn("varchar", {
+  @PrimaryColumn('varchar', {
     primary: true,
-    name: "reference",
+    name: 'reference',
     length: 30,
     unique: true,
   })
@@ -26,8 +40,8 @@ export class Article {
   @Length(4, 10)
   reference!: string;
 
-  @Column("varchar", {
-    name: "designation",
+  @Column('varchar', {
+    name: 'designation',
     nullable: true,
     length: 30,
     unique: true,
@@ -38,58 +52,58 @@ export class Article {
   @IsDefined()
   designation!: string;
 
-  @Column("varchar", { name: "type_fabrication_achat", length: 30 })
+  @Column('varchar', { name: 'type_fabrication_achat', length: 30 })
   @IsString()
   @Matches(new RegExp('^[a-zA-Z0-9. ]*$'))
   @MaxLength(30)
   @IsDefined()
   typeFabricationAchat!: string;
 
-  @Column("varchar", { name: "unite_achat_stock", length: 30 })
+  @Column('varchar', { name: 'unite_achat_stock', length: 30 })
   @IsString()
   @Matches(new RegExp('^[a-zA-Z0-9. ]*$'))
   @MaxLength(30)
   @IsDefined()
   uniteAchatStock!: string;
 
-  @Column("integer", { name: "delai_en_semaine" })
+  @Column('integer', { name: 'delai_en_semaine' })
   @IsNumber()
   @IsInt()
   @IsDefined()
   delaiEnSemaine!: number;
 
-  @Column("float", { name: "prix_standard", nullable: true })
+  @Column('float', { name: 'prix_standard', nullable: true })
   @IsNumber()
   @IsDecimal()
   prixStandard!: number | null;
 
-  @Column("integer", { name: "lot_de_reapprovisionnement", nullable: true })
+  @Column('integer', { name: 'lot_de_reapprovisionnement', nullable: true })
   @IsNumber()
   @IsInt()
   lotDeReapprovisionnement!: number | null;
 
-  @Column("integer", { name: "stock_mini", nullable: true })
+  @Column('integer', { name: 'stock_mini', nullable: true })
   @IsNumber()
   @IsInt()
   stockMini!: number | null;
 
-  @Column("integer", { name: "stock_maxi", nullable: true })
+  @Column('integer', { name: 'stock_maxi', nullable: true })
   @IsNumber()
   @IsInt()
   stockMaxi!: number | null;
 
-  @Column("float", { name: "pourcentage_de_perte", nullable: true })
+  @Column('float', { name: 'pourcentage_de_perte', nullable: true })
   @IsNumber()
   @IsDecimal()
   pourcentageDePerte!: number | null;
 
-  @Column("integer", { name: "inventaire", nullable: true })
+  @Column('integer', { name: 'inventaire', nullable: true })
   @IsNumber()
   @IsInt()
   inventaire!: number | null;
 
-  @Column("varchar", {
-    name: "PF_ou_MP_ou_Pi_ou_SE",
+  @Column('varchar', {
+    name: 'PF_ou_MP_ou_Pi_ou_SE',
     nullable: true,
     length: 2,
   })
@@ -100,29 +114,26 @@ export class Article {
     () => LienDeNomenclature,
     (lienDeNomenclature) => lienDeNomenclature.composant,
     {
-      eager: true
+      eager: false,
     }
   )
   @ValidateNested()
   composants!: LienDeNomenclature[];
 
+  // Peut être afficher la liste des ids je sais pas
   @OneToMany(
     () => LienDeNomenclature,
     (lienDeNomenclature) => lienDeNomenclature.compose,
     {
-      eager: true
+      eager: false,
     }
   )
   @ValidateNested()
   composes!: LienDeNomenclature[];
 
-  @OneToMany(
-    () => Operation,
-    (operation) => operation.reference,
-    {
-      eager: true
-    }
-  )
+  @OneToMany(() => Operation, (operation) => operation.reference, {
+    eager: false,
+  })
   @ValidateNested()
   operations!: Operation[];
 
@@ -130,7 +141,7 @@ export class Article {
     () => MouvementDeStock,
     (mouvementDeStock) => mouvementDeStock.reference,
     {
-      eager: true
+      eager: false,
     }
   )
   @ValidateNested()

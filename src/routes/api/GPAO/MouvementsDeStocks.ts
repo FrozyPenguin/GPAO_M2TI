@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import { deleteMouvementsDeStock } from '../../../controllers/MouvementDeStock/DeleteCtrl';
 import {
-  addMouvementsDeStock,
-  deleteMouvementsDeStock,
-  getMouvementsDeStock,
   getMouvementsDeStocks,
-  updateMouvementsDeStock,
-} from '../../../controllers/MouvementsDeStocksCtrl';
+  getMouvementsDeStock,
+} from '../../../controllers/MouvementDeStock/GetCtrl';
+import { addMouvementsDeStock } from '../../../controllers/MouvementDeStock/PostCtrl';
+import { updateMouvementsDeStock } from '../../../controllers/MouvementDeStock/PutCtrl';
 
 const router = Router();
 
