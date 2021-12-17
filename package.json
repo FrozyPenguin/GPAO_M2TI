@@ -11,17 +11,22 @@
     "@types/better-sqlite3": "^7.4.1",
     "@types/sqlite3": "^3.1.7",
     "better-sqlite3": "^7.4.5",
+    "class-validator": "^0.13.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "joi": "^17.4.2",
     "morgan": "^1.10.0",
-    "rotating-file-stream": "^3.0.2"
+    "reflect-metadata": "^0.1.13",
+    "rotating-file-stream": "^3.0.2",
+    "sqlite3": "^5.0.2",
+    "typeorm": "^0.2.41"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/morgan": "^1.9.3",
     "@types/node": "^14.0.9",
+    "@types/validator": "^13.7.0",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.4.1",
     "ts-node": "^10.4.0",
@@ -30,13 +35,16 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "comp": "tsc",
-    "start": "node ./dist/index.js",
+    "comp": "tsc && npm run copysql && npm run db:reset",
+    "start": "env PRODUCTION=true node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "tslint": "tslint --project tsconfig.json",
     "prettier:base": "prettier --parser typescript",
     "prettier:check": "npm run prettier:base -- --check \"./src/**/*.{ts,tsx}\"",
-    "prettier:write": "npm run prettier:base -- --write \"./src/**/*.{ts,tsx}\""
+    "prettier:write": "npm run prettier:base -- --write \"./src/**/*.{ts,tsx}\"",
+    "db:resetDev": "ts-node src/database/dbLoader.ts",
+    "db:reset": "node dist/database/dbLoader.js",
+    "copysql": "copyfiles -u 1 ./src/database/*.sql dist"
   },
   "husky": {
     "hooks": {

@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "CommonJS", /* Required for 'import {Article_type, Article, Articles_} from './Articles';' */
+    "module": "commonjs", /* Required for 'import {Article_type, Article, Articles_} from './Articles';' */
     "moduleResolution": "node",
     "outDir": "./dist",
     "rootDir": "./src",
     "sourceMap": false,
     "strictNullChecks": true,
-    "target": "ESNext",
+    "target": "es6",
     "strict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "exclude": [
     "node_modules",

@@ -3,6 +3,7 @@ import * as Morgan from 'morgan';
 import { createStream } from 'rotating-file-stream';
 import * as path from 'path';
 import * as cors from 'cors';
+import { connect } from './database';
 import recursiveTreeReader from './utils/recursiveTreeReader';
 import posixNormalize from './utils/posixNormalize';
 import print from './utils/printAllExpressRoutes';
@@ -13,6 +14,14 @@ let app = null;
 
 (async () => {
   app = Express();
+
+  // Connection à la bdd
+  try {
+    await connect();
+  } catch (e) {
+    console.error('Impossible de se connecter à la base de donnée');
+    process.exit(1);
+  }
 
   /**
    * Utilisation du logger HTTP Morgan
@@ -46,7 +55,7 @@ let app = null;
 
   // Importation automatique des routes
   const routesFolder = path.join(__dirname, 'routes');
-  const routes: Array<string> = await recursiveTreeReader(routesFolder);
+  const routes: string[] = await recursiveTreeReader(routesFolder, process.env.PRODUCTION ? '.js' : '.ts');
   for (let route of routes) {
     // Suppréssion de l'extension
     route = route.replace(/\.[^/.]+$/, '');

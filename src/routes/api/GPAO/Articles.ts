@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import {
-  addArticle,
-  getArticle,
-  getArticles,
-} from '../../../controllers/ArticlesCtrl';
+import { addArticle } from '../../../controllers/Article/PostCtrl';
+import { getArticle, getArticles } from '../../../controllers/Article/GetCtrl';
+import { deleteArticle } from '../../../controllers/Article/DeleteCtrl';
+import { updateArticle } from '../../../controllers/Article/PutCtrl';
 
 const router = Router();
 
@@ -11,9 +10,13 @@ const router = Router();
 router.get('/', getArticles);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Articles/CD100'
-router.get(':reference', getArticle);
+router.get('/:reference', getArticle);
 
 // Test: 'curl http://localhost:3000/api/GPAO/Articles/add'
-router.post('add', addArticle);
+router.post('/add', addArticle);
+
+router.put('/:reference', updateArticle);
+
+router.delete('/:reference', deleteArticle);
 
 export default router;

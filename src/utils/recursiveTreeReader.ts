@@ -7,6 +7,7 @@ interface RecursiveTreeReaderOptions {
 
 const recursiveTreeReader = (
   folderPath: string,
+  searchFileExtension: string,
   options?: RecursiveTreeReaderOptions
 ) => {
   return new Promise<Array<string>>(async (resolve, reject) => {
@@ -34,13 +35,15 @@ const recursiveTreeReader = (
         reject(error);
       }
 
+
       if (fileStat?.isDirectory()) {
         const recursivePath: Array<string> = (await recursiveTreeReader(
           filePath,
+          searchFileExtension,
           { basePath: options?.basePath }
         )) as Array<string>;
         pathArray.push(...recursivePath);
-      } else if (fileStat?.isFile() && file.endsWith('.ts')) {
+      } else if (fileStat?.isFile() && file.endsWith(searchFileExtension)) {
         pathArray.push(path.relative(options.basePath, filePath));
       }
     }
