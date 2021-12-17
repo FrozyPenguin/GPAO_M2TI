@@ -7,7 +7,7 @@ export async function resetDatabase(file: string, sql: string) {
     await fs.stat(file);
     await fs.unlink(file);
   } catch (e) {
-    console.log('Créationd du fichier de base de donnée ...');
+    console.log('Création du fichier de base de donnée ...');
   } finally {
     try {
       const db = new Database(file, { verbose: console.log });
