@@ -43,9 +43,15 @@ export async function updateArticle(
       });
     }
 
-    const updatedArticles: Article = await ArticleRepository.save(article);
+    const result = await ArticleRepository.update(
+      req.params.reference,
+      article
+    );
+
+    if (!result.affected || result.affected < 1) throw new Error('Not saved');
+
     return res.status(201).json({
-      message: 'Article mis à jour (succès) : ' + updatedArticles.reference,
+      message: 'Article mis à jour (succès) : ' + article.reference,
     });
   } catch (error) {
     console.error(error);

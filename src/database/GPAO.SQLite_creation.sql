@@ -149,3 +149,7 @@ insert into Operation
 select 'ES000',20,0.5,0.05,0.2,'Rectification',main_d_oeuvre.poste_de_charge_id,machine.poste_de_charge_id
 from Poste_de_charge as machine,Poste_de_charge as main_d_oeuvre
 where machine.designation = 'Rectifieuse' and main_d_oeuvre.designation = 'Rectifieur';
+
+insert into Mouvement_de_stock values('ROUE50', 3, 30, datetime('now'), 1);
+insert into Mouvement_de_stock values('CH005', 1, 20, '2021-12-17T04:53:52.000Z', 0);
+insert into Mouvement_de_stock values('CD100', 3, 40, datetime('now'), 1);

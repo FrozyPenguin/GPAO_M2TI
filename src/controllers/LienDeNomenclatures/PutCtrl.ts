@@ -190,11 +190,23 @@ export async function updateLienDeNomenclatureByCompositeKey(
       });
     }
 
-    const updatedLien: LienDeNomenclature =
-      await LienDeNomenclatureRepository.save(lien);
+    const result = await LienDeNomenclatureRepository.update(
+      {
+        composant: {
+          reference: req.params.composant,
+        },
+        compose: {
+          reference: req.params.compose,
+        },
+      },
+      lien
+    );
+
+    if (!result.affected || result.affected < 1) throw new Error('Not saved');
+
     return res.status(201).json({
       message: `Lien mis à jour (succès) : ${
-        `${updatedLien.compose.reference}, ${updatedLien.composant.reference}` ||
+        `${lien.compose.reference}, ${lien.composant.reference}` ||
         `${req.params.compose}, ${req.params.composant}`
       }`,
     });

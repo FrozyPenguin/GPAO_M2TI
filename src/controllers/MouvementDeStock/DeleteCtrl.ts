@@ -4,12 +4,47 @@ import { getRepository } from 'typeorm';
 
 const MouvementDeStockRepository = getRepository(MouvementDeStock);
 
-export function deleteMouvementsDeStock(
+export async function deleteMouvementsDeStock(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  res.status(500).json({
-    error: 'Not yet implemented !',
-  });
+  try {
+    const mouvement = await MouvementDeStockRepository.findOne(
+      {
+        periode: new Date(req.params.periode).toISOString(),
+        reference: {
+          reference: req.params.reference,
+        },
+      },
+      {
+        relations: ['reference'],
+      }
+    );
+
+    if (!mouvement) {
+      return res.status(404).json({
+        error: 404,
+        param: `${req.params.periode}, ${req.params.reference}`,
+        message: 'Mouvement not found !',
+      });
+    }
+
+    const removedMouvement = await MouvementDeStockRepository.remove(
+      mouvement as MouvementDeStock
+    );
+
+    return res.status(200).json({
+      message: `Mouvement supprimé (succès) : ${
+        `${removedMouvement.reference}, ${removedMouvement.periode}` ||
+        `${req.params.reference}, ${req.params.periode}`
+      }`,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: 500,
+      message: 'Erreur au niveau de votre demande !',
+    });
+  }
 }

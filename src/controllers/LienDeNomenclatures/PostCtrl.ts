@@ -58,7 +58,7 @@ export async function addLienDeNomenclature(
     const savedLien: LienDeNomenclature =
       await LienDeNomenclatureRepository.save(lien);
     return res.status(201).json({
-      message: 'Article validé (succès) : ' + savedLien.lienDeNomenclatureId,
+      message: 'Lien validé (succès) : ' + savedLien.lienDeNomenclatureId,
     });
   } catch (error) {
     return res.status(500).json({

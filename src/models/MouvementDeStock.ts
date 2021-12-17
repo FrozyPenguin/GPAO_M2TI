@@ -1,8 +1,11 @@
 import {
   IsDate,
+  IsDateString,
   IsDefined,
   IsInt,
   IsNumber,
+  Max,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import {
@@ -24,7 +27,6 @@ export class MouvementDeStock {
     primary: true,
   })
   @JoinColumn([{ name: 'reference', referencedColumnName: 'reference' }])
-  @ValidateNested()
   @IsDefined()
   reference!: Article;
 
@@ -41,14 +43,16 @@ export class MouvementDeStock {
   quantite!: number;
 
   // Ca je sais pas
-  @PrimaryColumn('datetime', { name: 'periode' })
+  //@PrimaryColumn('datetime', { name: 'periode' })
   @CreateDateColumn({ primary: true, name: 'periode' })
-  @IsDate()
+  @IsDateString()
   periode!: Date;
 
   @PrimaryColumn('integer', { name: 'entree_ou_sortie' })
   @IsNumber()
   @IsInt()
+  @Min(0)
+  @Max(1)
   @IsDefined()
   entreeOuSortie!: number;
 }
